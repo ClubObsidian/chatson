@@ -1,5 +1,9 @@
 package com.clubobsidian.chatson.parse;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class ChatsonTokenizer {
 
 	private String text;
@@ -8,9 +12,19 @@ public class ChatsonTokenizer {
 		this.text = text;
 	}
 	
-	public ChatsonToken[] tokenize()
+	public Collection<ChatsonToken> tokenize()
 	{
-		//TODO
+		List<ChatsonToken> tokens = new ArrayList<>();
+		StringBuilder buffer = new StringBuilder();
+		char[] chars = text.toCharArray();
+		for(int i = 0; i < chars.length; i++)
+		{
+			
+		}
 	}
 	
+	private ChatsonTokenType getType(char ch)
+	{
+		
+	}
 }

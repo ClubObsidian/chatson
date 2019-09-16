@@ -1,5 +1,7 @@
 package com.clubobsidian.chatson.format;
 
+import net.kyori.text.format.TextColor;
+
 public enum ChatsonTextColor {
 
 	AQUA('b'),
@@ -20,9 +22,9 @@ public enum ChatsonTextColor {
 	YELLOW('e');
 	
 	private char charCode;
-	private ChatsonTextColor(char colorCode)
+	private ChatsonTextColor(char charCode)
 	{
-		this.charCode = colorCode;
+		this.charCode = charCode;
 	}
 	
 	public char getCharCode()
@@ -35,7 +37,7 @@ public enum ChatsonTextColor {
 		return TextColor.valueOf(this.name());
 	}
 	
-	public ChatsonTextColor getByChar(char search)
+	public static ChatsonTextColor getByChar(char search)
 	{
 		for(ChatsonTextColor color : ChatsonTextColor.values())
 		{

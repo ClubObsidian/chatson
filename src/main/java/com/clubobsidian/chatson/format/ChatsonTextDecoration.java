@@ -1,5 +1,7 @@
 package com.clubobsidian.chatson.format;
 
+import net.kyori.text.format.TextDecoration;
+
 public enum ChatsonTextDecoration {
 
 	BOLD('l'),
@@ -25,7 +27,7 @@ public enum ChatsonTextDecoration {
 		return TextDecoration.valueOf(this.name());
 	}
 	
-	public ChatsonTextDecoration getByChar(char search)
+	public static ChatsonTextDecoration getByChar(char search)
 	{
 		for(ChatsonTextDecoration decoration : ChatsonTextDecoration.values())
 		{

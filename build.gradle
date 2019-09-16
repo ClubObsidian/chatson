@@ -18,4 +18,5 @@ repositories {
 
 dependencies {
     compile 'net.kyori:text-api:3.0.2'
+    compile 'net.kyori:text-serializer-gson:3.0.2'
 }
