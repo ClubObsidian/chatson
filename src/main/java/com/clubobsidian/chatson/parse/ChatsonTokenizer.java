@@ -1,7 +1,6 @@
 package com.clubobsidian.chatson.parse;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.clubobsidian.chatson.format.ChatsonTextColor;
@@ -16,7 +15,7 @@ public class ChatsonTokenizer {
 		this.text = text;
 	}
 	
-	public Collection<ChatsonToken> tokenize()
+	public List<ChatsonToken> tokenize()
 	{
 		List<ChatsonToken> tokens = new ArrayList<>();
 		StringBuilder buffer = new StringBuilder();
@@ -41,7 +40,7 @@ public class ChatsonTokenizer {
 					{
 						if(buffer.length() > 0)
 						{
-							tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
+							tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
 							buffer = new StringBuilder();
 						}
 						
@@ -57,13 +56,16 @@ public class ChatsonTokenizer {
 							{
 								if(chars[j] == '&' && j + 1 < len && chars[j + 1] == 'r')
 								{
-									tokens.add(new ChatsonToken(type, buffer.toString()));
+									tokens.add(new ChatsonToken(type, nextChar, buffer.toString()));
 									buffer = new StringBuilder();
-									i += j - i;
+									tokens.add(new ChatsonToken(type, 'r', null));
+									i = j + 1; //After the reset
+									break;
 								}
 								else if(j == len -1)
 								{
-									tokens.add(new ChatsonToken(type, buffer.toString()));
+									buffer.append(chars[j]);
+									tokens.add(new ChatsonToken(type, nextChar, buffer.toString()));
 									return tokens;
 								}
 								else
@@ -79,6 +81,10 @@ public class ChatsonTokenizer {
 			{
 				buffer.append(chars[i]);
 			}
+		}
+		if(buffer.length() > 0)
+		{
+			tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
 		}
 		
 		return tokens;

@@ -29,12 +29,12 @@ public class ChatsonParser {
 			}
 			else if(type == ChatsonTokenType.COLOR)
 			{
-				ChatsonTextColor color = ChatsonTextColor.getByChar(token.getData().toCharArray()[0]);
+				ChatsonTextColor color = ChatsonTextColor.getByChar(token.getIdentifier());
 				builder.color(color.getAPITextColor());
 			}
 			else if(type == ChatsonTokenType.DECORATION)
 			{
-				ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(token.getData().toCharArray()[0]);
+				ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(token.getIdentifier());
 				if(decoration == ChatsonTextDecoration.RESET)
 				{
 					builder.resetStyle();
@@ -46,7 +46,7 @@ public class ChatsonParser {
 			}
 			else if(type == ChatsonTokenType.SPECIAL)
 			{
-				ChatsonTextSpecial special = ChatsonTextSpecial.getByChar(token.getData().toCharArray()[0]);
+				ChatsonTextSpecial special = ChatsonTextSpecial.getByChar(token.getIdentifier());
 				if(special == ChatsonTextSpecial.HOVER)
 				{
 					builder.hoverEvent(HoverEvent.showText(TextComponent.of(token.getData())));
