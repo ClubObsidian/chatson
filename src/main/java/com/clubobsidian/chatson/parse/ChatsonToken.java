@@ -10,6 +10,11 @@ public class ChatsonToken {
 		this.data = data;
 	}
 	
+	public ChatsonToken(ChatsonTokenType type, char data)
+	{
+		this(type, String.valueOf(data));
+	}
+	
 	public ChatsonTokenType getType()
 	{
 		return this.type;
