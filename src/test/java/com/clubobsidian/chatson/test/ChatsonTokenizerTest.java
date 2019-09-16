@@ -2,12 +2,11 @@ package com.clubobsidian.chatson.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
 
+import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.format.ChatsonTextDecoration;
 import com.clubobsidian.chatson.parse.ChatsonToken;
 import com.clubobsidian.chatson.parse.ChatsonTokenType;
@@ -30,11 +29,11 @@ public class ChatsonTokenizerTest {
 	{
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ctest&htesthover");
 		List<ChatsonToken> tokens = tokenizer.tokenize();
-		assertTrue("Tokens is not size 3", tokens.size() == 3);
+		assertTrue("Tokens is not size 4", tokens.size() == 4);
 		assertTrue(tokens.get(0).getType() == ChatsonTokenType.COLOR);
 		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
 		assertTrue(tokens.get(2).getType() == ChatsonTokenType.SPECIAL);
-		assertTrue(tokens.get(2).getData().equals("testhover"));
+		assertTrue(tokens.get(3).getData().equals("testhover"));
 	}
 	
 	@Test
@@ -42,14 +41,40 @@ public class ChatsonTokenizerTest {
 	{
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ctest&htesthover&rafter");
 		List<ChatsonToken> tokens = tokenizer.tokenize();
-		System.out.println(tokens.size());
-		System.out.println(tokens);
-		assertTrue(tokens.size() == 5);
+		assertTrue(tokens.size() == 6);
 		assertTrue(tokens.get(0).getType() == ChatsonTokenType.COLOR);
 		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
 		assertTrue(tokens.get(2).getType() == ChatsonTokenType.SPECIAL);
-		assertTrue(tokens.get(2).getData().equals("testhover"));
-		assertTrue(tokens.get(3).getIdentifier() == ChatsonTextDecoration.RESET.getCharCode());
-		assertTrue(tokens.get(4).getData().contentEquals("after"));
+		assertTrue(tokens.get(3).getData().equals("testhover"));
+		assertTrue(tokens.get(4).getIdentifier() == ChatsonTextDecoration.RESET.getCharCode());
+		assertTrue(tokens.get(5).getData().contentEquals("after"));
 	}
+	
+	@Test
+	public void testTokenizerHoverResetAndColor()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ctest&h&atesthover&rafter");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 7);
+		
+		assertTrue(tokens.get(0).getType() == ChatsonTokenType.COLOR);
+		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
+		assertTrue(tokens.get(2).getType() == ChatsonTokenType.SPECIAL);
+		assertTrue(tokens.get(3).getType() == ChatsonTokenType.COLOR);
+		assertTrue(tokens.get(4).getData().equals("testhover"));
+		assertTrue(tokens.get(5).getIdentifier() == ChatsonTextDecoration.RESET.getCharCode());
+		assertTrue(tokens.get(6).getData().contentEquals("after"));
+		System.out.println(Chatson.getJson("&ctest&h&atesthover&rafter"));
+	}
+	
+	@Test
+	public void testTokenizerEscapeAnd()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&&");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 1);
+		assertTrue(tokens.get(0).getData().equals("&"));
+	}
+	
+	
 }

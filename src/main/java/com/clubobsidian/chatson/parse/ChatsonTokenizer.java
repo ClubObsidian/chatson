@@ -7,6 +7,8 @@ import com.clubobsidian.chatson.format.ChatsonTextColor;
 import com.clubobsidian.chatson.format.ChatsonTextDecoration;
 import com.clubobsidian.chatson.format.ChatsonTextSpecial;
 
+import net.kyori.text.TextComponent;
+
 public class ChatsonTokenizer {
 
 	private String text;
@@ -44,35 +46,11 @@ public class ChatsonTokenizer {
 							buffer = new StringBuilder();
 						}
 						
-						if(type == ChatsonTokenType.COLOR || type == ChatsonTokenType.DECORATION)
+						if(type == ChatsonTokenType.COLOR || type == ChatsonTokenType.DECORATION || type == ChatsonTokenType.SPECIAL)
 						{
 							tokens.add(new ChatsonToken(type, nextChar));
 							i++;
 							continue;
-						}
-						else if(type == ChatsonTokenType.SPECIAL)
-						{
-							for(int j = i + 2; j < len; j++)
-							{
-								if(chars[j] == '&' && j + 1 < len && chars[j + 1] == 'r')
-								{
-									tokens.add(new ChatsonToken(type, nextChar, buffer.toString()));
-									buffer = new StringBuilder();
-									tokens.add(new ChatsonToken(type, 'r', null));
-									i = j + 1; //After the reset
-									break;
-								}
-								else if(j == len -1)
-								{
-									buffer.append(chars[j]);
-									tokens.add(new ChatsonToken(type, nextChar, buffer.toString()));
-									return tokens;
-								}
-								else
-								{
-									buffer.append(chars[j]);
-								}
-							}
 						}
 					}
 				}
