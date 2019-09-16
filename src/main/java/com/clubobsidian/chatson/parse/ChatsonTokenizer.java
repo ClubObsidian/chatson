@@ -7,8 +7,6 @@ import com.clubobsidian.chatson.format.ChatsonTextColor;
 import com.clubobsidian.chatson.format.ChatsonTextDecoration;
 import com.clubobsidian.chatson.format.ChatsonTextSpecial;
 
-import net.kyori.text.TextComponent;
-
 public class ChatsonTokenizer {
 
 	private String text;

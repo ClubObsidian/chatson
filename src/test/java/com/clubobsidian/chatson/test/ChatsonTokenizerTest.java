@@ -64,7 +64,7 @@ public class ChatsonTokenizerTest {
 		assertTrue(tokens.get(4).getData().equals("testhover"));
 		assertTrue(tokens.get(5).getIdentifier() == ChatsonTextDecoration.RESET.getCharCode());
 		assertTrue(tokens.get(6).getData().contentEquals("after"));
-		System.out.println(Chatson.getJson("&ctest&h&atesthover&rafter"));
+		System.out.println(Chatson.getJson("&ctest&h&ahelp&r  &aasdf&q/help&r other stoof"));
 	}
 	
 	@Test

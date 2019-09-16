@@ -1,5 +1,6 @@
 package com.clubobsidian.chatson.parse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.clubobsidian.chatson.format.ChatsonTextColor;
@@ -9,7 +10,6 @@ import com.clubobsidian.chatson.format.ChatsonTextSpecial;
 import net.kyori.text.TextComponent;
 import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
-import net.kyori.text.format.Style;
 
 public class ChatsonParser {
 
@@ -21,12 +21,13 @@ public class ChatsonParser {
 	
 	public TextComponent parseTextComponent()
 	{
+		List<TextComponent> components = new ArrayList<>();
 		TextComponent.Builder builder = TextComponent.builder();
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer(this.text);
 		List<ChatsonToken> tokens = tokenizer.tokenize();
 		int size = tokens.size();
 		
-		boolean reset = false;
+		
 		for(int i = 0; i < tokens.size(); i++)
 		{
 			ChatsonToken token = tokens.get(i);
@@ -45,12 +46,8 @@ public class ChatsonParser {
 				ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(token.getIdentifier());
 				if(decoration == ChatsonTextDecoration.RESET)
 				{
-					reset = true;
-					
-					//builder.append("");
-					//builder.resetStyle();
-					//builder.append(TextComponent.empty());
-					//builder.resetStyle();
+					components.add(builder.build());
+					builder = TextComponent.builder();
 				}
 				else
 				{
@@ -68,7 +65,7 @@ public class ChatsonParser {
 						ChatsonToken nextToken = tokens.get(j);
 						ChatsonTokenType nextType = nextToken.getType();
 						char nextIdentifier = nextToken.getIdentifier();
-						System.out.println(nextType);
+						
 						if(nextType == ChatsonTokenType.TEXT)
 						{
 							hoverBuilder.append(nextToken.getData());
@@ -119,7 +116,15 @@ public class ChatsonParser {
 				}
 			}
 		}
+		
+		components.add(builder.build());
 
-		return builder.build();
+		TextComponent.Builder combined = TextComponent.builder();
+		for(TextComponent component : components)
+		{
+			combined.append(component);
+		}
+		
+		return combined.build();
 	}
 }
