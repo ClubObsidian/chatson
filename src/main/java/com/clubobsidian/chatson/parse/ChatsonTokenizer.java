@@ -45,7 +45,7 @@ public class ChatsonTokenizer {
 					
 					if(buffer.length() > 0)
 					{
-						tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
+						tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
 						buffer = new StringBuilder();
 					}
 
@@ -63,9 +63,10 @@ public class ChatsonTokenizer {
 				buffer.append(chars[i]);
 			}
 		}
+		
 		if(buffer.length() > 0)
 		{
-			tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
+			tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
 		}
 		
 		return tokens;

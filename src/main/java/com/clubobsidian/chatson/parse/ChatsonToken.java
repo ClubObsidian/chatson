@@ -5,16 +5,18 @@ public class ChatsonToken {
 	private ChatsonTokenType type;
 	private char identifier;
 	private String data;
-	public ChatsonToken(ChatsonTokenType type, char identifier, String data)
+	public ChatsonToken(ChatsonTokenType type, String data)
 	{
 		this.type = type;
-		this.identifier = identifier;
+		this.identifier = ' ';
 		this.data = data;
 	}
 	
 	public ChatsonToken(ChatsonTokenType type, char identifier)
 	{
-		this(type, identifier, null);
+		this.type = type;
+		this.identifier = identifier;
+		this.data = " ";
 	}
 	
 	public ChatsonTokenType getType()
