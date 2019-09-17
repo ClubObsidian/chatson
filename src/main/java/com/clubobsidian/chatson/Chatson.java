@@ -9,13 +9,13 @@ public final class Chatson {
 	
 	private Chatson() {}
 	
-	public static String getJson(String text)
+	public static String toJson(String chatson)
 	{
-		return GsonComponentSerializer.INSTANCE.serialize(getTextComponent(text));
+		return GsonComponentSerializer.INSTANCE.serialize(toTextComponent(chatson));
 	}
 	
-	public static TextComponent getTextComponent(String text)
+	public static TextComponent toTextComponent(String chatson)
 	{
-		return new ChatsonParser(text).parseTextComponent();
+		return new ChatsonParser(chatson).parseTextComponent();
 	}
 }
