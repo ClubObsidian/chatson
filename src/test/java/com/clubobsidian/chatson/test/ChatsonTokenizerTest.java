@@ -149,7 +149,6 @@ public class ChatsonTokenizerTest {
 	{
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer("test&");
 		List<ChatsonToken> tokens = tokenizer.tokenize();
-		System.out.println(tokens.get(0).getData());
 		assertTrue(tokens.size() == 1);
 		assertTrue(tokens.get(0).getData().equals("test&"));
 	}
