@@ -31,6 +31,33 @@ public class ChatsonParserTest {
 	}
 	
 	@Test
+	public void testMultipleColors()
+	{
+		ChatsonParser parser = new ChatsonParser("&ctest1&btest2&atest3");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 3);
+		
+		Component child = children.get(0);
+		assertTrue(child.color() == TextColor.RED);
+		assertTrue(child instanceof TextComponent);
+		TextComponent textOne = (TextComponent) child.children().get(0);
+		assertTrue(textOne.content().equals("test1"));
+		
+		Component childTwo = children.get(1);
+		assertTrue(childTwo.color() == TextColor.AQUA);
+		assertTrue(childTwo instanceof TextComponent);
+		TextComponent textTwo = (TextComponent) childTwo.children().get(0);
+		assertTrue(textTwo.content().equals("test2"));
+		
+		Component childThree = children.get(2);
+		assertTrue(childThree .color() == TextColor.GREEN);
+		assertTrue(childThree  instanceof TextComponent);
+		TextComponent text = (TextComponent) childThree.children().get(0);
+		assertTrue(text.content().equals("test3"));
+	}
+	
+	@Test
 	public void testParserDecoration()
 	{
 		ChatsonParser parser = new ChatsonParser("&ltest");
@@ -76,5 +103,15 @@ public class ChatsonParserTest {
 		assertTrue(child instanceof TextComponent);
 		TextComponent text = (TextComponent) child.children().get(0);
 		assertTrue(text.content().equals("test"));
-	}s
+	}
+	
+	@Test
+	public void testParserHoverColor()
+	{
+		ChatsonParser parser = new ChatsonParser("&c&ltest&h&atest&btest2");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		
+		System.out.println(Chatson.getJson("&c&ltest&h&atest&btest2"));
+	}
 }

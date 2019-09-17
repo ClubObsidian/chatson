@@ -32,12 +32,20 @@ public class ChatsonParser {
 		{
 			ChatsonToken token = tokens.get(i);
 			ChatsonTokenType type = token.getType();
+
 			if(type == ChatsonTokenType.TEXT)
 			{
 				builder.append(token.getData());
+				
 			}
 			else if(type == ChatsonTokenType.COLOR)
 			{
+				if(builder.build().children().size() > 0)
+				{
+					components.add(builder.build());
+					builder = TextComponent.builder();
+				}
+				
 				ChatsonTextColor color = ChatsonTextColor.getByChar(token.getIdentifier());
 				builder.color(color.getAPITextColor());
 			}
@@ -59,6 +67,7 @@ public class ChatsonParser {
 				ChatsonTextSpecial special = ChatsonTextSpecial.getByChar(token.getIdentifier());
 				if(special == ChatsonTextSpecial.HOVER)
 				{
+					List<TextComponent> hoverComponents = new ArrayList<>();
 					TextComponent.Builder hoverBuilder = TextComponent.builder();
 					for(int j = i + 1; j < size; j++)
 					{
@@ -72,6 +81,12 @@ public class ChatsonParser {
 						}
 						else if(nextType == ChatsonTokenType.COLOR)
 						{
+							if(hoverBuilder.build().children().size() > 0)
+							{
+								hoverComponents.add(hoverBuilder.build());
+								hoverBuilder = TextComponent.builder();
+							}
+							
 							hoverBuilder.color(ChatsonTextColor.getByChar(nextIdentifier).getAPITextColor());
 						}
 						else if(nextType == ChatsonTokenType.DECORATION)
@@ -89,11 +104,26 @@ public class ChatsonParser {
 								hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 							}
 						}
+						
+						if(j == size - 1) //Check to see if we are the end of the loop and increment
+						{
+							i += j - i;
+						}
 					}
 					
-					TextComponent hoverComponent = hoverBuilder.build();
 					
-					builder.hoverEvent(HoverEvent.showText(hoverComponent));
+					TextComponent hoverComponent = hoverBuilder.build();
+					hoverComponents.add(hoverComponent);
+					
+					hoverBuilder = TextComponent.builder();
+					for(TextComponent component : hoverComponents)
+					{
+						hoverBuilder.append(component);
+					}
+					
+					TextComponent builtHoverComponent = hoverBuilder.build();
+					
+					builder.hoverEvent(HoverEvent.showText(builtHoverComponent));
 				} 
 				else if(i + 1 < size)
 				{
