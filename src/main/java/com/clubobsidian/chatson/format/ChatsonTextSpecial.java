@@ -5,8 +5,8 @@ public enum ChatsonTextSpecial {
 	HOVER('h'),
 	RUN_COMMAND('q'),
 	SUGGEST_COMMAND('w'),
-	URL('u');
-	
+	URL('u'),
+	CHANGE_PAGE('p');
 	
 	private char charCode;
 	private ChatsonTextSpecial(char charCode)

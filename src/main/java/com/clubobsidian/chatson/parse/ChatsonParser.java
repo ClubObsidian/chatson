@@ -101,18 +101,21 @@ public class ChatsonParser {
 					if(special == ChatsonTextSpecial.RUN_COMMAND)
 					{
 						builder.clickEvent(ClickEvent.runCommand(nextToken.getData()));
-						i++;
 					}
 					else if(special == ChatsonTextSpecial.SUGGEST_COMMAND)
 					{
 						builder.clickEvent(ClickEvent.suggestCommand(nextToken.getData()));
-						i++;
 					}
 					else if(special == ChatsonTextSpecial.URL)
 					{
-						builder.clickEvent(ClickEvent.openUrl(token.getData()));
-						i++;
+						builder.clickEvent(ClickEvent.openUrl(nextToken.getData()));
 					}
+					else if(special == ChatsonTextSpecial.CHANGE_PAGE)
+					{
+						builder.clickEvent(ClickEvent.changePage(nextToken.getData()));
+					}
+					
+					i++;
 				}
 			}
 		}
