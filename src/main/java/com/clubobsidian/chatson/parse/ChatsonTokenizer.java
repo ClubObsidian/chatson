@@ -34,23 +34,28 @@ public class ChatsonTokenizer {
 						i++;
 						continue;
 					}
-					
+
 					ChatsonTokenType type = this.getType(nextChar);
-					if(type != ChatsonTokenType.TEXT)
+					
+					if(type == ChatsonTokenType.TEXT)
 					{
-						if(buffer.length() > 0)
-						{
-							tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
-							buffer = new StringBuilder();
-						}
-						
-						if(type == ChatsonTokenType.COLOR || type == ChatsonTokenType.DECORATION || type == ChatsonTokenType.SPECIAL)
-						{
-							tokens.add(new ChatsonToken(type, nextChar));
-							i++;
-							continue;
-						}
+						buffer.append('&');
+						continue;
 					}
+					
+					if(buffer.length() > 0)
+					{
+						tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, ' ', buffer.toString()));
+						buffer = new StringBuilder();
+					}
+
+					
+					tokens.add(new ChatsonToken(type, nextChar));
+					i++;
+				}
+				else
+				{
+					buffer.append("&");
 				}
 			}
 			else

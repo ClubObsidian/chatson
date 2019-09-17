@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.format.ChatsonTextDecoration;
+import com.clubobsidian.chatson.format.ChatsonTextSpecial;
 import com.clubobsidian.chatson.parse.ChatsonToken;
 import com.clubobsidian.chatson.parse.ChatsonTokenType;
 import com.clubobsidian.chatson.parse.ChatsonTokenizer;
@@ -15,12 +15,22 @@ import com.clubobsidian.chatson.parse.ChatsonTokenizer;
 public class ChatsonTokenizerTest {
 
 	@Test
-	public void testTokenizerSizeTwoColor()
+	public void testTokenizerColor()
 	{
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ctest");
 		List<ChatsonToken> tokens = tokenizer.tokenize();
 		assertTrue(tokens.size() == 2);
 		assertTrue(tokens.get(0).getType() == ChatsonTokenType.COLOR);
+		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
+	}
+	
+	@Test
+	public void testTokenizerDecoration()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ltest");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 2);
+		assertTrue(tokens.get(0).getType() == ChatsonTokenType.DECORATION);
 		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
 	}
 	
@@ -64,7 +74,65 @@ public class ChatsonTokenizerTest {
 		assertTrue(tokens.get(4).getData().equals("testhover"));
 		assertTrue(tokens.get(5).getIdentifier() == ChatsonTextDecoration.RESET.getCharCode());
 		assertTrue(tokens.get(6).getData().contentEquals("after"));
-		System.out.println(Chatson.getJson("&ctest&h&ahelp&r  &aasdf&q/help&r other stoof"));
+	}
+	
+	@Test
+	public void testTokenizerRunCommand()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("help me&q/help");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 3);
+		assertTrue(tokens.get(0).getData().equals("help me"));
+		assertTrue(tokens.get(1).getIdentifier() == ChatsonTextSpecial.RUN_COMMAND.getCharCode());
+		assertTrue(tokens.get(2).getData().equals("/help"));
+	}
+	
+	@Test
+	public void testTokenizerSuggestCommand()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("help me&w/help");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 3);
+		assertTrue(tokens.get(0).getData().equals("help me"));
+		assertTrue(tokens.get(1).getIdentifier() == ChatsonTextSpecial.SUGGEST_COMMAND.getCharCode());
+		assertTrue(tokens.get(2).getData().equals("/help"));
+	}
+	
+	@Test
+	public void testTokenizerURL()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("Click me to go to Github!&uhttps://www.github.com");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 3);
+		assertTrue(tokens.get(0).getData().equals("Click me to go to Github!"));
+		assertTrue(tokens.get(1).getIdentifier() == ChatsonTextSpecial.URL.getCharCode());
+		assertTrue(tokens.get(2).getData().equals("https://www.github.com"));
+	}
+	
+	@Test
+	public void testTokenizerInvalidFormattingCode()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&zInvalid code!");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 1);
+		assertTrue(tokens.get(0).getData().equals("&zInvalid code!"));
+	}
+	
+	@Test
+	public void testTokenizerInvalidFormattingCodeWithPrefix()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("a&zInvalid code!");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 1);
+		assertTrue(tokens.get(0).getData().equals("a&zInvalid code!"));
+	}
+	
+	@Test
+	public void testTokenizerEmpty()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		assertTrue(tokens.size() == 0);
 	}
 	
 	@Test
@@ -76,5 +144,13 @@ public class ChatsonTokenizerTest {
 		assertTrue(tokens.get(0).getData().equals("&"));
 	}
 	
-	
+	@Test
+	public void testTokenizerEndAnd()
+	{
+		ChatsonTokenizer tokenizer = new ChatsonTokenizer("test&");
+		List<ChatsonToken> tokens = tokenizer.tokenize();
+		System.out.println(tokens.get(0).getData());
+		assertTrue(tokens.size() == 1);
+		assertTrue(tokens.get(0).getData().equals("test&"));
+	}
 }
