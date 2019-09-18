@@ -59,6 +59,16 @@ public class ChatsonParser {
 				}
 				else
 				{
+					if(i == tokens.size() - 1)
+						continue;
+					
+					ChatsonToken next = tokens.get(i + 1);
+					ChatsonTokenType nextType = next.getType();
+					if(nextType == ChatsonTokenType.COLOR)
+					{
+						continue;
+					}
+					
 					builder.decoration(decoration.getAPITextDecoration(), true);
 				}
 			}
@@ -101,6 +111,16 @@ public class ChatsonParser {
 							}
 							else
 							{
+								if(j == tokens.size() - 1)
+									continue;
+								
+								ChatsonToken after = tokens.get(j + 1);
+								ChatsonTokenType afterType = after.getType();
+								if(afterType == ChatsonTokenType.COLOR)
+								{
+									continue;
+								}
+								
 								hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 							}
 						}

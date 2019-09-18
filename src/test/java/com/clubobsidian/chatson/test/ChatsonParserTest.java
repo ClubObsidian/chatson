@@ -5,10 +5,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.Test;
 
-import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.parse.ChatsonParser;
 
 import net.kyori.text.Component;
@@ -109,6 +107,29 @@ public class ChatsonParserTest {
 	}
 	
 	@Test
+	public void testParserColorBeforeDecoration()
+	{
+		ChatsonParser parser = new ChatsonParser("&l&ctest");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		assertTrue(child.color() == TextColor.RED);
+		assertTrue(child.decorations().size() == 0);
+	}
+	
+	@Test
+	public void testParserDanglingDecoration()
+	{
+		ChatsonParser parser = new ChatsonParser("test&l");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		assertTrue(child.decorations().size() == 0);
+	}
+	
+	@Test
 	public void testParserHoverColor()
 	{
 		ChatsonParser parser = new ChatsonParser("&c&ltest&h&atest1&btest2");
@@ -169,4 +190,34 @@ public class ChatsonParserTest {
 		System.out.println(hover);
 		assertTrue(textHoverComponent.content().equals("test1"));
 	}
+	
+	@Test
+	public void testParserRunCommand()
+	{
+		
+	}
+	/*
+	 else if(i + 1 < size)
+				{
+					ChatsonToken nextToken = tokens.get(i + 1);
+					if(special == ChatsonTextSpecial.RUN_COMMAND)
+					{
+						builder.clickEvent(ClickEvent.runCommand(nextToken.getData()));
+					}
+					else if(special == ChatsonTextSpecial.SUGGEST_COMMAND)
+					{
+						builder.clickEvent(ClickEvent.suggestCommand(nextToken.getData()));
+					}
+					else if(special == ChatsonTextSpecial.URL)
+					{
+						builder.clickEvent(ClickEvent.openUrl(nextToken.getData()));
+					}
+					else if(special == ChatsonTextSpecial.CHANGE_PAGE)
+					{
+						builder.clickEvent(ClickEvent.changePage(nextToken.getData()));
+					}
+					
+					i++;
+				}
+	 */
 }
