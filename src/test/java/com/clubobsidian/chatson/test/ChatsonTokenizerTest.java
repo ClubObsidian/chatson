@@ -39,7 +39,7 @@ public class ChatsonTokenizerTest {
 	{
 		ChatsonTokenizer tokenizer = new ChatsonTokenizer("&ctest&htesthover");
 		List<ChatsonToken> tokens = tokenizer.tokenize();
-		assertTrue("Tokens is not size 4", tokens.size() == 4);
+		assertTrue(tokens.size() == 4);
 		assertTrue(tokens.get(0).getType() == ChatsonTokenType.COLOR);
 		assertTrue(tokens.get(1).getType() == ChatsonTokenType.TEXT);
 		assertTrue(tokens.get(2).getType() == ChatsonTokenType.SPECIAL);
