@@ -111,26 +111,31 @@ public class ChatsonParser {
 							}
 							else
 							{
+								boolean skip = false;
 								if(j == tokens.size() - 1)
-									continue;
-								
-								ChatsonToken after = tokens.get(j + 1);
-								ChatsonTokenType afterType = after.getType();
-								if(afterType == ChatsonTokenType.COLOR)
+									skip = true;
+
+								if(!skip)
 								{
-									continue;
+									ChatsonToken after = tokens.get(j + 1);
+									ChatsonTokenType afterType = after.getType();
+									if(afterType == ChatsonTokenType.COLOR)
+										skip = true;
+									
+									if(!skip)
+									{
+										hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
+									}
 								}
-								
-								hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 							}
 						}
-						
+
 						if(j == size - 1) //Check to see if we are the end of the loop and increment
 						{
 							i += j - i;
 						}
 					}
-					
+
 					
 					TextComponent hoverComponent = hoverBuilder.build();
 					hoverComponents.add(hoverComponent);

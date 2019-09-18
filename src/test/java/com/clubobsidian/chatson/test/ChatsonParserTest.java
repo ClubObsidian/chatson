@@ -7,10 +7,12 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.parse.ChatsonParser;
 
 import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
+import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
 import net.kyori.text.format.TextColor;
 import net.kyori.text.format.TextDecoration;
@@ -107,7 +109,7 @@ public class ChatsonParserTest {
 	}
 	
 	@Test
-	public void testParserColorBeforeDecoration()
+	public void testParserDecorationBeforeColor()
 	{
 		ChatsonParser parser = new ChatsonParser("&l&ctest");
 		TextComponent component = parser.parseTextComponent();
@@ -151,6 +153,48 @@ public class ChatsonParserTest {
 	}
 	
 	@Test
+	public void testParserHoverDecorationBeforeColor()
+	{
+		ChatsonParser parser = new ChatsonParser("&c&ltest&h&l&ctest1");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		assertTrue(child.color() == TextColor.RED);
+		assertTrue(child.decorations().size() == 1);
+		assertTrue(child.decorations().toArray()[0] == TextDecoration.BOLD);
+		assertTrue(child instanceof TextComponent);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("test"));
+		HoverEvent hover = child.hoverEvent();
+		List<Component> hoverChildren = hover.value().children();
+		assertTrue(hoverChildren.size() == 1);
+		Set<TextDecoration> decorations = hoverChildren.get(0).decorations();
+		assertTrue(decorations.size() == 0);
+	}
+	
+	@Test
+	public void testParserHoverDanglingDecoration()
+	{
+		ChatsonParser parser = new ChatsonParser("&c&ltest&h&ctest1&l");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		assertTrue(child.color() == TextColor.RED);
+		assertTrue(child.decorations().size() == 1);
+		assertTrue(child.decorations().toArray()[0] == TextDecoration.BOLD);
+		assertTrue(child instanceof TextComponent);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("test"));
+		HoverEvent hover = child.hoverEvent();
+		List<Component> hoverChildren = hover.value().children();
+		assertTrue(hoverChildren.size() == 1);
+		Set<TextDecoration> decorations = hoverChildren.get(0).decorations();
+		assertTrue(decorations.size() == 0);
+	}
+	
+	@Test
 	public void testParserHoverDecoration()
 	{
 		ChatsonParser parser = new ChatsonParser("&c&ltest&h&ltest1");
@@ -187,37 +231,66 @@ public class ChatsonParserTest {
 		Component hoverComponent = hover.value().children().get(0).children().get(0);
 		assertTrue(hoverComponent instanceof TextComponent);
 		TextComponent textHoverComponent = (TextComponent) hoverComponent;
-		System.out.println(hover);
 		assertTrue(textHoverComponent.content().equals("test1"));
 	}
 	
 	@Test
 	public void testParserRunCommand()
 	{
-		
+		ChatsonParser parser = new ChatsonParser("test&q/help");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("test"));
+		ClickEvent click = child.clickEvent();
+		assertTrue(click.action() == ClickEvent.Action.RUN_COMMAND);
+		assertTrue(click.value().equals("/help"));
 	}
-	/*
-	 else if(i + 1 < size)
-				{
-					ChatsonToken nextToken = tokens.get(i + 1);
-					if(special == ChatsonTextSpecial.RUN_COMMAND)
-					{
-						builder.clickEvent(ClickEvent.runCommand(nextToken.getData()));
-					}
-					else if(special == ChatsonTextSpecial.SUGGEST_COMMAND)
-					{
-						builder.clickEvent(ClickEvent.suggestCommand(nextToken.getData()));
-					}
-					else if(special == ChatsonTextSpecial.URL)
-					{
-						builder.clickEvent(ClickEvent.openUrl(nextToken.getData()));
-					}
-					else if(special == ChatsonTextSpecial.CHANGE_PAGE)
-					{
-						builder.clickEvent(ClickEvent.changePage(nextToken.getData()));
-					}
-					
-					i++;
-				}
-	 */
+	
+	@Test
+	public void testParserSuggestCommand()
+	{
+		ChatsonParser parser = new ChatsonParser("test2&w/help");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("test2"));
+		ClickEvent click = child.clickEvent();
+		assertTrue(click.action() == ClickEvent.Action.SUGGEST_COMMAND);
+		assertTrue(click.value().equals("/help"));
+	}
+	
+	@Test
+	public void testParserOpenUrl()
+	{
+		ChatsonParser parser = new ChatsonParser("github&uhttps://www.github.com");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("github"));
+		ClickEvent click = child.clickEvent();
+		assertTrue(click.action() == ClickEvent.Action.OPEN_URL);
+		assertTrue(click.value().equals("https://www.github.com"));
+	}
+	
+	@Test
+	public void testParserChangePage()
+	{
+		ChatsonParser parser = new ChatsonParser("Go to page 3&p3");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("Go to page 3"));
+		ClickEvent click = child.clickEvent();
+		assertTrue(click.action() == ClickEvent.Action.CHANGE_PAGE);
+		assertTrue(click.value().equals("3"));
+	}
 }
