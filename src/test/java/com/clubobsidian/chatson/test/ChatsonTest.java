@@ -28,6 +28,4 @@ public class ChatsonTest {
 		String json = Chatson.toJson("&c&ltest");
 		assertTrue(json.equals("{\"text\":\"\",\"extra\":[{\"text\":\"\",\"extra\":[{\"text\":\"test\"}],\"bold\":true,\"color\":\"red\"}]}"));
 	}
-	
-	
 }
