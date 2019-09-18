@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.parse.ChatsonParser;
 
 import net.kyori.text.Component;
