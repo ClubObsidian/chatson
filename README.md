@@ -1,5 +1,8 @@
 # chatson
  
+ [![Build Status](https://travis-ci.org/ClubObsidian/chatson.svg?branch=master)](https://travis-ci.org/ClubObsidian/chatson)
+ [![](https://jitpack.io/v/clubobsidian/chatson.svg)](https://jitpack.io/#clubobsidian/chatson)
+ [![codecov](https://codecov.io/gh/ClubObsidian/chatson/branch/master/graph/badge.svg)](https://codecov.io/gh/ClubObsidian/chatson)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Using
