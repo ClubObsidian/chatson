@@ -2,6 +2,7 @@ package com.clubobsidian.chatson.parse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.clubobsidian.chatson.format.ChatsonTextColor;
 import com.clubobsidian.chatson.format.ChatsonTextDecoration;
@@ -11,6 +12,8 @@ import net.kyori.text.TextComponent;
 import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
 import net.kyori.text.format.Style;
+import net.kyori.text.format.TextColor;
+import net.kyori.text.format.TextDecoration;
 
 public class ChatsonParser {
 
@@ -37,7 +40,6 @@ public class ChatsonParser {
 			if(type == ChatsonTokenType.TEXT)
 			{
 				builder.append(token.getData());
-				
 			}
 			else if(type == ChatsonTokenType.COLOR)
 			{
@@ -70,6 +72,37 @@ public class ChatsonParser {
 						continue;
 					}
 					
+					int indexBefore = i - 1;
+					if(indexBefore > 0)
+					{
+						//If there is not a color before
+						ChatsonToken beforeToken = tokens.get(indexBefore); 
+						if(beforeToken.getType() != ChatsonTokenType.COLOR && beforeToken.getType() != ChatsonTokenType.DECORATION)
+						{
+							if(builder.build().children().size() > 0)
+							{
+								components.add(builder.build());
+								builder = TextComponent.builder();
+							}
+							
+							
+							Style style = null;
+							int componentSize = components.size();
+							if(componentSize > 0)
+							{
+								TextComponent component = components.get(componentSize - 1);
+								style = component.style();
+							}
+							
+							if(style != null)
+							{
+								Set<TextDecoration> decorations = style.decorations();
+								TextColor color = style.color();
+								builder.color(color);
+								builder.decorations(decorations, true);
+							}
+						}
+					}
 					
 					builder.decoration(decoration.getAPITextDecoration(), true);
 				}
@@ -126,6 +159,37 @@ public class ChatsonParser {
 									
 									if(!skip)
 									{
+										int indexBefore = j - 1;
+										if(indexBefore > 0)
+										{
+											//If there is not a color before
+											ChatsonToken beforeToken = tokens.get(indexBefore); 
+											if(beforeToken.getType() != ChatsonTokenType.COLOR && beforeToken.getType() != ChatsonTokenType.DECORATION)
+											{
+												if(hoverBuilder.build().children().size() > 0)
+												{
+													hoverComponents.add(hoverBuilder.build());
+													hoverBuilder = TextComponent.builder();
+												}
+												
+												Style style = null;
+												int componentSize = hoverComponents.size();
+												if(componentSize > 0)
+												{
+													TextComponent component = hoverComponents.get(componentSize - 1);
+													style = component.style();
+												}
+												
+												if(style != null)
+												{
+													Set<TextDecoration> decorations = style.decorations();
+													TextColor color = style.color();
+													hoverBuilder.color(color);
+													hoverBuilder.decorations(decorations, true);
+												}
+											}
+										}
+										
 										hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 									}
 								}

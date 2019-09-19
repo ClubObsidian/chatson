@@ -9,7 +9,7 @@ public enum ChatsonTextDecoration {
 	OBFUSCATED('k'),
 	RESET('r'),
 	STRIKETHROUGH('m'),
-	UNDERLINE('n');
+	UNDERLINED('n');
 	
 	private char charCode;
 	private ChatsonTextDecoration(char colorCode)

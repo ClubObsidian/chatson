@@ -131,6 +131,21 @@ public class ChatsonParserTest {
 		assertTrue(child.decorations().size() == 0);
 	}
 	
+	//System.out.println(Chatson.toJson("&aHello&h&aHello &lWorld"));
+	
+	@Test
+	public void testParserDecorationAfterColorCopy()
+	{
+		ChatsonParser parser = new ChatsonParser("&aHello &lWorld");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 2);
+		assertTrue(children.get(0).color() == TextColor.GREEN);
+		assertTrue(children.get(0).decorations().size() == 0);
+		assertTrue(children.get(1).color() == TextColor.GREEN);
+		assertTrue(children.get(1).decorations().size() == 1);
+	}
+	
 	@Test
 	public void testParserHoverColor()
 	{
@@ -214,6 +229,29 @@ public class ChatsonParserTest {
 		Set<TextDecoration> decorations = hoverChildren.get(0).decorations();
 		assertTrue(decorations.size() == 1);
 		assertTrue(decorations.toArray()[0] == TextDecoration.BOLD);
+	}
+	
+	@Test
+	public void testParserHoverDecorationAfterColorCopy()
+	{
+		ChatsonParser parser = new ChatsonParser("&c&ltest&h&atest1&ltest2");
+		TextComponent component = parser.parseTextComponent();
+		List<Component> children = component.children();
+		assertTrue(children.size() == 1);
+		Component child = children.get(0);
+		assertTrue(child.color() == TextColor.RED);
+		assertTrue(child.decorations().size() == 1);
+		assertTrue(child.decorations().toArray()[0] == TextDecoration.BOLD);
+		assertTrue(child instanceof TextComponent);
+		TextComponent text = (TextComponent) child.children().get(0);
+		assertTrue(text.content().equals("test"));
+		HoverEvent hover = child.hoverEvent();
+		List<Component> hoverChildren = hover.value().children();
+		assertTrue(hoverChildren.size() == 2);
+		assertTrue(hoverChildren.get(0).color() == TextColor.GREEN);
+		assertTrue(hoverChildren.get(0).decorations().size() == 0);
+		assertTrue(hoverChildren.get(1).color() == TextColor.GREEN);
+		assertTrue(hoverChildren.get(1).decorations().size() == 1);
 	}
 	
 	@Test
