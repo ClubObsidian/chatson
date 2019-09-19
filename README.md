@@ -11,7 +11,7 @@ Chatson.toJson(chatson);
 Chatson.toTextComponent(chatson);
 ```
 
-Warning do not link to other Chatson classes as those are subject to change and the version will not bump.
+Warning do not use other chatson project classes as those are subject to change and the version will not bump.
 
 ## Setting up as a dependency
 
