@@ -43,5 +43,6 @@ public class ChatsonTest {
 		assertTrue(json.get(0).equals("{\"text\":\"\",\"extra\":[{\"text\":\"\",\"extra\":[{\"text\":\"test\"}],\"color\":\"red\"}]}"));
 		assertTrue(json.get(1).equals("{\"text\":\"\",\"extra\":[{\"text\":\"\",\"extra\":[{\"text\":\"test\"}],\"bold\":true}]}"));
 		assertTrue(json.get(2).equals("{\"text\":\"\",\"extra\":[{\"text\":\"\",\"extra\":[{\"text\":\"test\"}],\"bold\":true,\"color\":\"red\"}]}"));
+		System.out.println(Chatson.toJson("&a/mb accept&h&bClick me to run the command!&q/mb accept&r&7 - &fAccepts an invite"));
 	}
 }

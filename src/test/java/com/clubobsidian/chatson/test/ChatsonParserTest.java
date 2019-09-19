@@ -89,7 +89,6 @@ public class ChatsonParserTest {
 		assertTrue(child instanceof TextComponent);
 		TextComponent text = (TextComponent) child.children().get(0);
 		assertTrue(text.content().equals("test"));
-		System.out.println(Chatson.toJson("&a&bHi"));
 	}
 	
 	

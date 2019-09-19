@@ -134,6 +134,17 @@ public class ChatsonParser {
 							
 							hoverBuilder.color(ChatsonTextColor.getByChar(nextIdentifier).getAPITextColor());
 						}
+						else if(nextType == ChatsonTokenType.SPECIAL)
+						{
+							if(hoverBuilder.build().children().size() > 0)
+							{
+								hoverComponents.add(hoverBuilder.build());
+								hoverBuilder = TextComponent.builder();
+								j--;
+								i += j - i;
+								break;
+							}
+						}
 						else if(nextType == ChatsonTokenType.DECORATION)
 						{
 							ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(nextIdentifier);
