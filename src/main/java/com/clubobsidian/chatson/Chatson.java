@@ -1,5 +1,8 @@
 package com.clubobsidian.chatson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.clubobsidian.chatson.parse.ChatsonParser;
 
 import net.kyori.text.TextComponent;
@@ -12,6 +15,17 @@ public final class Chatson {
 	public static String toJson(String chatson)
 	{
 		return GsonComponentSerializer.INSTANCE.serialize(toTextComponent(chatson));
+	}
+	
+	public static List<String> toJson(List<String> chatson)
+	{
+		List<String> lines = new ArrayList<>();
+		for(String line : chatson)
+		{
+			lines.add(toJson(line));
+		}
+		
+		return lines;
 	}
 	
 	public static TextComponent toTextComponent(String chatson)
