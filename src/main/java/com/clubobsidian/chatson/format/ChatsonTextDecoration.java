@@ -6,7 +6,7 @@ public enum ChatsonTextDecoration {
 
 	BOLD('l'),
 	ITALIC('o'),
-	MAGIC('k'),
+	OBFUSCATED('k'),
 	RESET('r'),
 	STRIKETHROUGH('m'),
 	UNDERLINE('n');

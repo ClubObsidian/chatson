@@ -10,6 +10,7 @@ import com.clubobsidian.chatson.format.ChatsonTextSpecial;
 import net.kyori.text.TextComponent;
 import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
+import net.kyori.text.format.Style;
 
 public class ChatsonParser {
 
@@ -68,6 +69,7 @@ public class ChatsonParser {
 					{
 						continue;
 					}
+					
 					
 					builder.decoration(decoration.getAPITextDecoration(), true);
 				}
