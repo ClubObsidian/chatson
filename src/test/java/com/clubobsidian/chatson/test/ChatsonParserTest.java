@@ -25,6 +25,7 @@ public class ChatsonParserTest {
 		ChatsonParser parser = new ChatsonParser("&ctest");
 		TextComponent component = parser.parseTextComponent();
 		List<Component> children = component.children();
+		System.out.println(component.content());
 		assertTrue(children.size() == 1);
 		Component child = children.get(0);
 		assertTrue(child.color() == TextColor.RED);
@@ -144,7 +145,7 @@ public class ChatsonParserTest {
 		assertTrue(children.get(1).decorations().size() == 1);
 	}
 	
-	@Test
+	/*@Test
 	public void testParserHoverColor()
 	{
 		ChatsonParser parser = new ChatsonParser("&c&ltest&h&atest1&btest2");
@@ -282,7 +283,7 @@ public class ChatsonParserTest {
 		assertTrue(firstChild.content().equals("/mb accept"));
 		TextComponent hover = (TextComponent) children.get(0).hoverEvent().value().children().get(0).children().get(0);
 		assertTrue(hover.content().equals("Click me to run the command!"));
-	}
+	}*/
 	
 	@Test
 	public void testParserRunCommand()
@@ -343,5 +344,4 @@ public class ChatsonParserTest {
 		assertTrue(click.action() == ClickEvent.Action.CHANGE_PAGE);
 		assertTrue(click.value().equals("3"));
 	}
-
 }
