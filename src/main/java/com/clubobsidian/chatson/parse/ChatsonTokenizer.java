@@ -28,7 +28,7 @@ public class ChatsonTokenizer {
 				if(i + 1 < len)
 				{
 					char nextChar = chars[i + 1];
-					if(nextChar == '&')
+					if(nextChar == '&') 
 					{
 						buffer.append('&');
 						i++;
@@ -40,7 +40,6 @@ public class ChatsonTokenizer {
 					if(type == ChatsonTokenType.TEXT)
 					{
 						buffer.append('&');
-
 					}
 					else
 					{
@@ -50,12 +49,12 @@ public class ChatsonTokenizer {
 							buffer = new StringBuilder();
 						}
 						
+						i++;
+						
 						if(i != len - 1)
 						{
 							tokens.add(new ChatsonToken(type, nextChar));			
 						}
-			
-						i++;
 					}
 				}
 				else
