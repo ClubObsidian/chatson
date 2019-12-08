@@ -62,8 +62,6 @@ public class ChatsonParser {
 				}
 				else
 				{
-					if(i == tokens.size() - 1)
-						continue;
 					
 					ChatsonToken next = tokens.get(i + 1);
 					ChatsonTokenType nextType = next.getType();
@@ -158,53 +156,49 @@ public class ChatsonParser {
 							else
 							{
 								boolean skip = false;
-								if(j == tokens.size() - 1)
+
+								ChatsonToken after = tokens.get(j + 1);
+								ChatsonTokenType afterType = after.getType();
+								if(afterType == ChatsonTokenType.COLOR)
 									skip = true;
 
 								if(!skip)
 								{
-									ChatsonToken after = tokens.get(j + 1);
-									ChatsonTokenType afterType = after.getType();
-									if(afterType == ChatsonTokenType.COLOR)
-										skip = true;
-									
-									if(!skip)
+									int indexBefore = j - 1;
+									if(indexBefore > 0)
 									{
-										int indexBefore = j - 1;
-										if(indexBefore > 0)
+										//If there is not a color before
+										ChatsonToken beforeToken = tokens.get(indexBefore); 
+										if(beforeToken.getType() != ChatsonTokenType.COLOR && beforeToken.getType() != ChatsonTokenType.DECORATION)
 										{
-											//If there is not a color before
-											ChatsonToken beforeToken = tokens.get(indexBefore); 
-											if(beforeToken.getType() != ChatsonTokenType.COLOR && beforeToken.getType() != ChatsonTokenType.DECORATION)
+											if(hoverBuilder.build().children().size() > 0)
 											{
-												if(hoverBuilder.build().children().size() > 0)
-												{
-													hoverComponents.add(hoverBuilder.build());
-													hoverBuilder = TextComponent.builder();
-												}
-												
-												Style style = null;
-												int componentSize = hoverComponents.size();
-												if(componentSize > 0)
-												{
-													TextComponent component = hoverComponents.get(componentSize - 1);
-													style = component.style();
-												}
-												
-												if(style != null)
-												{
-													Set<TextDecoration> decorations = style.decorations();
-													TextColor color = style.color();
-													hoverBuilder.color(color);
-													hoverBuilder.decorations(decorations, true);
-												}
+												hoverComponents.add(hoverBuilder.build());
+												hoverBuilder = TextComponent.builder();
+											}
+
+											Style style = null;
+											int componentSize = hoverComponents.size();
+											if(componentSize > 0)
+											{
+												TextComponent component = hoverComponents.get(componentSize - 1);
+												style = component.style();
+											}
+
+											if(style != null)
+											{
+												Set<TextDecoration> decorations = style.decorations();
+												TextColor color = style.color();
+												hoverBuilder.color(color);
+												hoverBuilder.decorations(decorations, true);
 											}
 										}
-										
-										hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 									}
+
+									hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
 								}
 							}
+
 						}
 
 						if(j == size - 1) //Check to see if we are the end of the loop and increment
@@ -213,18 +207,18 @@ public class ChatsonParser {
 						}
 					}
 
-					
+
 					TextComponent hoverComponent = hoverBuilder.build();
 					hoverComponents.add(hoverComponent);
-					
+
 					hoverBuilder = TextComponent.builder();
 					for(TextComponent component : hoverComponents)
 					{
 						hoverBuilder.append(component);
 					}
-					
+
 					TextComponent builtHoverComponent = hoverBuilder.build();
-					
+
 					builder.hoverEvent(HoverEvent.showText(builtHoverComponent));
 				} 
 				else if(i + 1 < size)
@@ -246,12 +240,12 @@ public class ChatsonParser {
 					{
 						builder.clickEvent(ClickEvent.changePage(nextToken.getData()));
 					}
-					
+
 					i++;
 				}
 			}
 		}
-		
+
 		components.add(builder.build());
 
 		TextComponent.Builder combined = TextComponent.builder();
@@ -259,7 +253,7 @@ public class ChatsonParser {
 		{
 			combined.append(component);
 		}
-		
+
 		return combined.build();
 	}
 }
