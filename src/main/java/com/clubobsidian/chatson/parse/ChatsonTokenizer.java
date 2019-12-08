@@ -40,18 +40,23 @@ public class ChatsonTokenizer {
 					if(type == ChatsonTokenType.TEXT)
 					{
 						buffer.append('&');
-						continue;
-					}
-					
-					if(buffer.length() > 0)
-					{
-						tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
-						buffer = new StringBuilder();
-					}
 
-					
-					tokens.add(new ChatsonToken(type, nextChar));
-					i++;
+					}
+					else
+					{
+						if(buffer.length() > 0)
+						{
+							tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
+							buffer = new StringBuilder();
+						}
+						
+						if(i != len - 1)
+						{
+							tokens.add(new ChatsonToken(type, nextChar));			
+						}
+			
+						i++;
+					}
 				}
 				else
 				{
