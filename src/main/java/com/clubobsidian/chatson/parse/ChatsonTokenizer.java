@@ -49,9 +49,25 @@ public class ChatsonTokenizer {
 						buffer = new StringBuilder();
 					}
 
-					
-					tokens.add(new ChatsonToken(type, nextChar));
-					i++;
+					if(i + 1 != len - 1)
+					{
+						tokens.add(new ChatsonToken(type, nextChar));
+						i++;
+						
+						if(type == ChatsonTokenType.COLOR)
+						{
+							int tokensSize = tokens.size();
+							if(tokensSize >= 2)
+							{
+								int checkIndex = tokensSize - 2;
+								ChatsonTokenType checkDecorator = tokens.get(checkIndex).getType();
+								if(checkDecorator == ChatsonTokenType.DECORATION)
+								{
+									tokens.remove(checkIndex);
+								}
+							}
+						}
+					}
 				}
 				else
 				{
@@ -64,6 +80,7 @@ public class ChatsonTokenizer {
 			}
 		}
 		
+		//Add any remaining buffer text
 		if(buffer.length() > 0)
 		{
 			tokens.add(new ChatsonToken(ChatsonTokenType.TEXT, buffer.toString()));
