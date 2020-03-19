@@ -18,6 +18,7 @@ import net.kyori.text.format.TextDecoration;
 public class ChatsonParser {
 
 	private String text;
+	private TextComponent.Builder hoverBuilder;
 	public ChatsonParser(String text)
 	{
 		this.text = text;
@@ -57,6 +58,14 @@ public class ChatsonParser {
 				ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(token.getIdentifier());
 				if(decoration == ChatsonTextDecoration.RESET)
 				{
+					if(this.hoverBuilder != null)
+					{
+						TextComponent hoverComponent = builder.build();
+						this.hoverBuilder.hoverEvent(HoverEvent.showText(hoverComponent));
+						builder = hoverBuilder;
+						this.hoverBuilder = null;
+					}
+					
 					components.add(builder.build());
 					builder = TextComponent.builder();
 				}
@@ -110,116 +119,8 @@ public class ChatsonParser {
 				ChatsonTextSpecial special = ChatsonTextSpecial.getByChar(token.getIdentifier());
 				if(special == ChatsonTextSpecial.HOVER)
 				{
-					List<TextComponent> hoverComponents = new ArrayList<>();
-					TextComponent.Builder hoverBuilder = TextComponent.builder();
-					for(int j = i + 1; j < size; j++)
-					{
-						ChatsonToken nextToken = tokens.get(j);
-						ChatsonTokenType nextType = nextToken.getType();
-						char nextIdentifier = nextToken.getIdentifier();
-						
-						if(nextType == ChatsonTokenType.TEXT)
-						{
-							hoverBuilder.append(nextToken.getData());
-						}
-						else if(nextType == ChatsonTokenType.COLOR)
-						{
-							if(hoverBuilder.build().children().size() > 0)
-							{
-								hoverComponents.add(hoverBuilder.build());
-								hoverBuilder = TextComponent.builder();
-							}
-							
-							hoverBuilder.color(ChatsonTextColor.getByChar(nextIdentifier).getAPITextColor());
-						}
-						else if(nextType == ChatsonTokenType.SPECIAL)
-						{
-							if(hoverBuilder.build().children().size() > 0)
-							{
-								hoverComponents.add(hoverBuilder.build());
-								hoverBuilder = TextComponent.builder();
-								j--;
-								i += j - i;
-								break;
-							}
-						}
-						else if(nextType == ChatsonTokenType.DECORATION)
-						{
-							ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(nextIdentifier);
-							if(decoration == ChatsonTextDecoration.RESET)
-							{
-								//Go back one and break out so it can be handled by the outside loop
-								j--;
-								i += j - i;
-								break;
-							}
-							else
-							{
-								boolean skip = false;
-
-								ChatsonToken after = tokens.get(j + 1);
-								ChatsonTokenType afterType = after.getType();
-								if(afterType == ChatsonTokenType.COLOR)
-									skip = true;
-
-								if(!skip)
-								{
-									int indexBefore = j - 1;
-									if(indexBefore > 0)
-									{
-										//If there is not a color before
-										ChatsonToken beforeToken = tokens.get(indexBefore); 
-										if(beforeToken.getType() != ChatsonTokenType.COLOR && beforeToken.getType() != ChatsonTokenType.DECORATION)
-										{
-											if(hoverBuilder.build().children().size() > 0)
-											{
-												hoverComponents.add(hoverBuilder.build());
-												hoverBuilder = TextComponent.builder();
-											}
-
-											Style style = null;
-											int componentSize = hoverComponents.size();
-											if(componentSize > 0)
-											{
-												TextComponent component = hoverComponents.get(componentSize - 1);
-												style = component.style();
-											}
-
-											if(style != null)
-											{
-												Set<TextDecoration> decorations = style.decorations();
-												TextColor color = style.color();
-												hoverBuilder.color(color);
-												hoverBuilder.decorations(decorations, true);
-											}
-										}
-									}
-
-									hoverBuilder.decoration(decoration.getAPITextDecoration(), true);
-								}
-							}
-
-						}
-
-						if(j == size - 1) //Check to see if we are the end of the loop and increment
-						{
-							i += j - i;
-						}
-					}
-
-
-					TextComponent hoverComponent = hoverBuilder.build();
-					hoverComponents.add(hoverComponent);
-
-					hoverBuilder = TextComponent.builder();
-					for(TextComponent component : hoverComponents)
-					{
-						hoverBuilder.append(component);
-					}
-
-					TextComponent builtHoverComponent = hoverBuilder.build();
-
-					builder.hoverEvent(HoverEvent.showText(builtHoverComponent));
+					this.hoverBuilder = builder;
+					builder = TextComponent.builder();
 				} 
 				else if(i + 1 < size)
 				{
