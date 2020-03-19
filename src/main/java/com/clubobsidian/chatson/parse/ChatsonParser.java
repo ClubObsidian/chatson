@@ -58,13 +58,7 @@ public class ChatsonParser {
 				ChatsonTextDecoration decoration = ChatsonTextDecoration.getByChar(token.getIdentifier());
 				if(decoration == ChatsonTextDecoration.RESET)
 				{
-					if(this.hoverBuilder != null)
-					{
-						TextComponent hoverComponent = builder.build();
-						this.hoverBuilder.hoverEvent(HoverEvent.showText(hoverComponent));
-						builder = hoverBuilder;
-						this.hoverBuilder = null;
-					}
+					builder = this.resetHover(builder);
 					
 					components.add(builder.build());
 					builder = TextComponent.builder();
@@ -124,6 +118,8 @@ public class ChatsonParser {
 				} 
 				else if(i + 1 < size)
 				{
+					builder = this.resetHover(builder);
+					
 					ChatsonToken nextToken = tokens.get(i + 1);
 					if(special == ChatsonTextSpecial.RUN_COMMAND)
 					{
@@ -156,5 +152,19 @@ public class ChatsonParser {
 		}
 
 		return combined.build();
+	}
+	
+	private TextComponent.Builder resetHover(TextComponent.Builder builder)
+	{
+		if(this.hoverBuilder != null)
+		{
+			TextComponent hoverComponent = builder.build();
+			this.hoverBuilder.hoverEvent(HoverEvent.showText(hoverComponent));
+			TextComponent.Builder newBuilder = this.hoverBuilder;
+			this.hoverBuilder = null;
+			return newBuilder;
+		}
+		
+		return builder;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.clubobsidian.chatson.Chatson;
 import com.clubobsidian.chatson.parse.ChatsonParser;
 
 import net.kyori.text.Component;
@@ -275,12 +276,17 @@ public class ChatsonParserTest {
 		ChatsonParser parser = new ChatsonParser("&a/mb accept&h&bClick me to run the command!&q/mb accept&r&7 - &fAccepts an invite");
 		TextComponent component = parser.parseTextComponent();
 		List<Component> children = component.children();
+			
 		assertTrue(children.size() == 3);
 		assertTrue(children.get(0).children().get(0) instanceof TextComponent);
 		TextComponent firstChild = (TextComponent) children.get(0).children().get(0);
+		
 		assertTrue(firstChild.content().equals("/mb accept"));
-		TextComponent hover = (TextComponent) children.get(0).hoverEvent().value().children().get(0).children().get(0);
+		
+		TextComponent hover = (TextComponent) children.get(0).hoverEvent().value().children().get(0);
+		
 		assertTrue(hover.content().equals("Click me to run the command!"));
+		
 	}
 	
 	@Test
